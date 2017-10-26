@@ -32,10 +32,18 @@ import android.test.ActivityInstrumentationTestCase2;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.android.testing.espresso.BasicSample.R.id.checkBox;
+import static com.example.android.testing.espresso.BasicSample.R.string.This_is_a_checkbox;
+import static com.example.android.testing.espresso.BasicSample.R.string.type_something;
 
 
 /**
@@ -49,6 +57,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class ChangeTextBehaviorTest {
 
     public static final String STRING_TO_BE_TYPED = "Espresso";
+    public static final String TEST_STRING = "This is just a test";
 
     /**
      * A JUnit {@link Rule @Rule} to launch your activity under test. This is a replacement
@@ -69,7 +78,7 @@ public class ChangeTextBehaviorTest {
     public void changeText_sameActivity() {
         // Type text and then press the button.
         onView(withId(R.id.editTextUserInput))
-                .perform(typeText(STRING_TO_BE_TYPED), closeSoftKeyboard());
+                .perform(replaceText(STRING_TO_BE_TYPED), closeSoftKeyboard());
         onView(withId(R.id.changeTextBt)).perform(click());
 
         // Check that the text was changed.
@@ -86,4 +95,37 @@ public class ChangeTextBehaviorTest {
         // This view is in a different Activity, no need to tell Espresso.
         onView(withId(R.id.show_text_view)).check(matches(withText(STRING_TO_BE_TYPED)));
     }
+
+    @Test
+    public void editTextUserInput_sameActivityUsingHint() {
+        onView(withHint(type_something)).perform(typeText(TEST_STRING),
+                closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(click());
+        onView(withHint(type_something)).check(matches(withText(TEST_STRING)));
+    }
+
+    @Test
+    public void editTextUserInput_sameActivityUsingContentDesription() {
+        onView(withContentDescription(type_something)).perform(typeText(TEST_STRING),
+                closeSoftKeyboard());
+        onView(withId(R.id.changeTextBt)).perform(click());
+        onView(withHint(type_something)).check(matches(withText(TEST_STRING)));
+    }
+
+    @Test
+    public void checkBox_verifyChecked() {
+        onView(withId(checkBox)).check(matches(isNotChecked()));
+        onView(withId(checkBox)).perform(click());
+        onView(withId(checkBox)).check(matches(isChecked()));
+    }
+
+    @Test
+    public void checkBox_verifyCheckedWithContentDesc() {
+        onView(withContentDescription(This_is_a_checkbox)).check(matches(isNotChecked()));
+        onView(withContentDescription(This_is_a_checkbox)).perform(click());
+        onView(withContentDescription(This_is_a_checkbox)).check(matches(isChecked()));
+    }
+
+    @Test
+    public void
 }

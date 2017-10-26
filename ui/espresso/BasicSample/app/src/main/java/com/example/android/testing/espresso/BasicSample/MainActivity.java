@@ -18,10 +18,16 @@ package com.example.android.testing.espresso.BasicSample;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import static android.R.attr.textColor;
+import static android.R.attr.textViewStyle;
 
 /**
  * An {@link Activity} that gets a text string from the user and displays it back when the user
@@ -35,6 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     // The EditText where the user types the message.
     private EditText mEditText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
